@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="playfair, caeser, Affine, Vigenere">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playfair Cipher Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Playfair Cipher</h1>
+
+        <div class="forms">
+            <form id="cipher-form">
+                <div class="fm">
+                    <label for="message">Message</label>
+                    <input type="text" id="message" placeholder="Enter Your Message" name="message" required>
+                </div>
+
+                <div class="fm">
+                    <label for="key">Key</label>
+                    <input type="text" id="key" placeholder="Enter Your Key" name="key" required>
+                </div>
+
+                <div class="list">
+                    <select name="list" id="list">
+                        <option value="encryption">Encryption</option>
+                        <option value="decryption">Decryption</option>
+                    </select>
+                </div>
+
+                <button type="submit">Process Text</button>
+            </form>
+        </div>
+
+        <div class="grid" id="matrix-grid">
+            <div class="cell">A</div>
+            <div class="cell">B</div>
+            <div class="cell">C</div>
+            <div class="cell">D</div>
+            <div class="cell">E</div>
+            <div class="cell">F</div>
+            <div class="cell">G</div>
+            <div class="cell">H</div>
+            <div class="cell">I</div>
+            <div class="cell">K</div>
+            <div class="cell">L</div>
+            <div class="cell">M</div>
+            <div class="cell">N</div>
+            <div class="cell">O</div>
+            <div class="cell">P</div>
+            <div class="cell">Q</div>
+            <div class="cell">R</div>
+            <div class="cell">S</div>
+            <div class="cell">T</div>
+            <div class="cell">U</div>
+            <div class="cell">V</div>
+            <div class="cell">W</div>
+            <div class="cell">X</div>
+            <div class="cell">Y</div>
+            <div class="cell">Z</div>
+        </div>
+
+        <div class="result-section" id="result-box">
+            <h2>Output Result</h2>
+            <div id="final-result"></div>
+
+            <h3>Step-by-Step Analysis</h3>
+            <div id="steps-log"></div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>

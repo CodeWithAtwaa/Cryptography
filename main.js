@@ -43,27 +43,27 @@ function displayMatrix(matrix) {
 
 function prepareMessage(message, mode) {
     let cleanMsg = message.toUpperCase().replace(/J/g, 'I').replace(/[^A-Z]/g, '');
-    let steps = `[1] Prepared Input: ${cleanMsg}\n`;
+    let steps = `Prepared Input: ${cleanMsg}\n`;
     let pairs = [];
 
     if (mode === "encryption") {
-        let i = 0;
-        while (i < cleanMsg.length) {
-            let char1 = cleanMsg[i];
-            let char2 = cleanMsg[i + 1];
-
-            if (!char2) {
-                pairs.push(char1 + 'X');
-                steps += `-> Lone char fixed: ${char1} -> ${char1}X\n`;
-                i++;
-            } else if (char1 === char2) {
-                pairs.push(char1 + 'X');
-                steps += `-> Duplicate fixed: ${char1}${char2} -> ${char1}X\n`;
-                i++;
-            } else {
-                pairs.push(char1 + char2);
-                i += 2;
+        let modifiedMsg = "";
+        for (let i = 0; i < cleanMsg.length; i++) {
+            modifiedMsg += cleanMsg[i];
+            if (i < cleanMsg.length - 1 && cleanMsg[i] === cleanMsg[i + 1] && (modifiedMsg.length % 2 !== 0)) {
+                modifiedMsg += 'X';
+                steps += `-> Duplicate fixed inside pair: ${cleanMsg[i]}${cleanMsg[i]} -> ${cleanMsg[i]}X\n`;
             }
+        }
+        
+        if (modifiedMsg.length % 2 !== 0) {
+            let lastChar = modifiedMsg[modifiedMsg.length - 1];
+            modifiedMsg += 'Z';
+            steps += `-> Lone final char fixed: ${lastChar} -> ${lastChar}X\n`;
+        }
+
+        for (let i = 0; i < modifiedMsg.length; i += 2) {
+            pairs.push(modifiedMsg[i] + modifiedMsg[i + 1]);
         }
     } else {
         for (let i = 0; i < cleanMsg.length; i += 2) {
@@ -71,7 +71,7 @@ function prepareMessage(message, mode) {
         }
     }
 
-    steps += `[2] Split Digraphs: ${pairs.join(' ')}\n\n`;
+    steps += `Split Digraphs: ${pairs.join(' ')}\n\n`;
     return { pairs, stepsBefore: steps };
 }
 
@@ -86,8 +86,8 @@ function findPosition(char, matrix) {
 
 function processPlayfair(pairs, matrix, mode) {
     let finalResult = "";
-    let steps = `[3] Cipher Execution Rules:\n`;
-    let shift = (mode === "encryption") ? 1 : 4;
+    let steps = `Cipher Execution Rules:\n`;
+    let shift = (mode === "encryption") ? 1 : -1;
 
     pairs.forEach(pair => {
         let p1 = findPosition(pair[0], matrix);
@@ -95,12 +95,12 @@ function processPlayfair(pairs, matrix, mode) {
         let c1, c2;
 
         if (p1.row === p2.row) {
-            c1 = matrix[p1.row][(p1.col + shift) % 5];
-            c2 = matrix[p2.row][(p2.col + shift) % 5];
+            c1 = matrix[p1.row][(p1.col + shift + 5) % 5];
+            c2 = matrix[p2.row][(p2.col + shift + 5) % 5];
             steps += `-> ${pair} (Row Match) => ${c1}${c2}\n`;
         } else if (p1.col === p2.col) {
-            c1 = matrix[(p1.row + shift) % 5][p1.col];
-            c2 = matrix[(p2.row + shift) % 5][p2.col];
+            c1 = matrix[(p1.row + shift + 5) % 5][p1.col];
+            c2 = matrix[(p2.row + shift + 5) % 5][p2.col];
             steps += `-> ${pair} (Col Match) => ${c1}${c2}\n`;
         } else {
             c1 = matrix[p1.row][p2.col];
